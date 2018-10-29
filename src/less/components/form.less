@@ -89,6 +89,9 @@
 @form-legend-font-size:                         @global-large-font-size;
 @form-legend-line-height:                       1.4;
 
+@form-help-valid-color:                         @form-success-color;
+@form-help-invalid-color:                       @form-danger-color;
+
 @form-stacked-margin-bottom:                    @global-small-margin;
 
 @form-horizontal-label-width:                   200px;
@@ -346,9 +349,13 @@
  * Error
  */
 
+.uk-form-validated .uk-input:invalid,
+.uk-form-validated .uk-select:invalid,
+.uk-form-validated .uk-textarea:invalid,
 .uk-form-danger,
 .uk-form-danger:focus {
     color: @form-danger-color;
+    ~ .uk-form-help-invalid { display: block; }
     .hook-form-danger;
 }
 
@@ -356,9 +363,13 @@
  * Success
  */
 
+.uk-form-validated .uk-input:valid,
+.uk-form-validated .uk-select:valid,
+.uk-form-validated .uk-textarea:valid,
 .uk-form-success,
 .uk-form-success:focus  {
     color: @form-success-color;
+    ~ .uk-form-help-valid { display: block; }
     .hook-form-success;
 }
 
@@ -603,6 +614,31 @@ select.uk-form-width-xsmall { width: (@form-width-xsmall + 25px); }
 }
 
 
+/* Help Block
+ ========================================================================== */
+
+.uk-form-help {
+    font-size: @form-small-font-size;
+    margin-top: @form-padding-vertical;
+    .hook-form-help;
+}
+
+.uk-form-help.uk-form-help-valid,
+.uk-form-help.uk-form-help-invalid {
+    display: none;
+}
+
+.uk-form-help.uk-form-help-valid {
+    color: @form-help-valid-color;
+    .hook-form-help-valid;
+}
+
+.uk-form-help.uk-form-help-invalid {
+    color: @form-help-invalid-color;
+    .hook-form-help-invalid;
+}
+
+
 /* Layout
  ========================================================================== */
 
@@ -727,6 +763,9 @@ select.uk-form-width-xsmall { width: (@form-width-xsmall + 25px); }
 .hook-form-radio-disabled() {}
 .hook-form-legend() {}
 .hook-form-label() {}
+.hook-form-help() {}
+.hook-form-help-valid() {}
+.hook-form-help-invalid() {}
 .hook-form-stacked-label() {}
 .hook-form-horizontal-label() {}
 .hook-form-misc() {}

@@ -4,6 +4,7 @@ import Core from './core';
 import Cover from './cover';
 import Drop from './drop';
 import Dropdown from './dropdown';
+import Form from './form';
 import FormCustom from './form-custom';
 import Gif from './gif';
 import Grid from './grid';
@@ -37,6 +38,7 @@ export default function (UIkit) {
     UIkit.component('cover', Cover);
     UIkit.component('drop', Drop);
     UIkit.component('dropdown', Dropdown);
+    UIkit.component('form', Form);
     UIkit.component('formCustom', FormCustom);
     UIkit.component('gif', Gif);
     UIkit.component('grid', Grid);

@@ -1494,18 +1494,38 @@ button.uk-icon:not(:disabled) {
 /*
  * Error
  */
+.uk-form-validated .uk-input:invalid,
+.uk-form-validated .uk-select:invalid,
+.uk-form-validated .uk-textarea:invalid,
 .uk-form-danger,
 .uk-form-danger:focus {
   color: #f0506e;
   border-color: #f0506e;
 }
+.uk-form-validated .uk-input:invalid ~ .uk-form-help-invalid,
+.uk-form-validated .uk-select:invalid ~ .uk-form-help-invalid,
+.uk-form-validated .uk-textarea:invalid ~ .uk-form-help-invalid,
+.uk-form-danger ~ .uk-form-help-invalid,
+.uk-form-danger:focus ~ .uk-form-help-invalid {
+  display: block;
+}
 /*
  * Success
  */
+.uk-form-validated .uk-input:valid,
+.uk-form-validated .uk-select:valid,
+.uk-form-validated .uk-textarea:valid,
 .uk-form-success,
 .uk-form-success:focus {
   color: #32d296;
   border-color: #32d296;
+}
+.uk-form-validated .uk-input:valid ~ .uk-form-help-valid,
+.uk-form-validated .uk-select:valid ~ .uk-form-help-valid,
+.uk-form-validated .uk-textarea:valid ~ .uk-form-help-valid,
+.uk-form-success ~ .uk-form-help-valid,
+.uk-form-success:focus ~ .uk-form-help-valid {
+  display: block;
 }
 /*
  * Blank
@@ -1731,6 +1751,22 @@ select.uk-form-width-xsmall {
 .uk-form-label {
   color: #333;
   font-size: 0.875rem;
+}
+/* Help Block
+ ========================================================================== */
+.uk-form-help {
+  font-size: 0.875rem;
+  margin-top: 4px;
+}
+.uk-form-help.uk-form-help-valid,
+.uk-form-help.uk-form-help-invalid {
+  display: none;
+}
+.uk-form-help.uk-form-help-valid {
+  color: #32d296;
+}
+.uk-form-help.uk-form-help-invalid {
+  color: #f0506e;
 }
 /* Layout
  ========================================================================== */

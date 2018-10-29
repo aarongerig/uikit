@@ -4712,6 +4712,39 @@
 
     };
 
+    var Form = {
+        data: {
+            clsValidated: 'uk-form-validated',
+        },
+
+        connected: function() {
+            if (!hasAttr(this.$el, 'novalidate')) {
+                attr(this.$el, 'novalidate', 'novalidate');
+            }
+        },
+
+        events: {
+
+            submit: function(e) {
+                if (this.$el.checkValidity() === false) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+
+                if (!hasClass(this.$el, this.clsValidated)) {
+                    addClass(this.$el, this.clsValidated);
+                }
+            },
+
+            reset: function() {
+                if (hasClass(this.$el, this.clsValidated)) {
+                    removeClass(this.$el, this.clsValidated);
+                }
+            },
+
+        },
+    };
+
     var FormCustom = {
 
         mixins: [Class],
@@ -6188,30 +6221,27 @@
                         if (this.stack) {
                             this.prev = prev;
                         } else {
-                            prev.hide().then(this.show);
+
+                            active$1 = prev;
+
+                            if (prev.isToggled()) {
+                                prev.hide().then(this.show);
+                            } else {
+                                once(prev.$el, 'beforeshow hidden', this.show, false, function (ref) {
+                                    var target = ref.target;
+                                    var type = ref.type;
+
+                                    return type === 'hidden' && target === prev.$el;
+                                });
+                            }
                             e.preventDefault();
-                            return;
+
                         }
+
+                        return;
                     }
 
                     registerEvents();
-
-                }
-
-            },
-
-            {
-                name: 'beforehide',
-
-                self: true,
-
-                handler: function() {
-
-                    active$1 = active$1 && active$1 !== this && active$1 || this.prev;
-
-                    if (!active$1) {
-                        deregisterEvents();
-                    }
 
                 }
 
@@ -6238,6 +6268,20 @@
 
             {
 
+                name: 'hide',
+
+                self: true,
+
+                handler: function() {
+                    if (!active$1 || active$1 === this) {
+                        deregisterEvents();
+                    }
+                }
+
+            },
+
+            {
+
                 name: 'hidden',
 
                 self: true,
@@ -6250,23 +6294,30 @@
                     var ref = this;
                     var prev = ref.prev;
 
-                    while (prev) {
+                    active$1 = active$1 && active$1 !== this && active$1 || prev;
 
-                        if (prev.clsPage === this$1.clsPage) {
-                            found = true;
-                            break;
+                    if (!active$1) {
+
+                        css(document.body, 'overflowY', '');
+
+                    } else {
+                        while (prev) {
+
+                            if (prev.clsPage === this$1.clsPage) {
+                                found = true;
+                                break;
+                            }
+
+                            prev = prev.prev;
+
                         }
-
-                        prev = prev.prev;
 
                     }
 
                     if (!found) {
                         removeClass(document.documentElement, this.clsPage);
-
                     }
 
-                    !this.prev && css(document.body, 'overflowY', '');
                 }
 
             }
@@ -6287,7 +6338,7 @@
 
                 if (this.container && this.$el.parentNode !== this.container) {
                     append(this.container, this.$el);
-                    this._callConnected();
+                    return Promise.resolve().then(this.show);
                 }
 
                 return this.toggleElement(this.$el, true, animate$1(this));
@@ -6342,7 +6393,9 @@
         var transitionElement = ref.transitionElement;
         var _toggle = ref._toggle;
 
-        return function (el, show) { return new Promise(function (resolve) { return requestAnimationFrame(function () {
+        return function (el, show) { return new Promise(function (resolve, reject) { return once(el, 'show hide', function () {
+                    el._reject && el._reject();
+                    el._reject = reject;
 
                     _toggle(el, show);
 
@@ -6931,7 +6984,7 @@
 
                 handler: function() {
 
-                    if (this.mode === 'reveal' && !hasClass(this.panel, this.clsMode)) {
+                    if (this.mode === 'reveal' && !hasClass(this.panel.parentNode, this.clsMode)) {
                         wrapAll(this.panel, '<div>');
                         addClass(this.panel.parentNode, this.clsMode);
                     }
@@ -8075,6 +8128,7 @@
         UIkit.component('cover', Cover);
         UIkit.component('drop', Drop);
         UIkit.component('dropdown', Dropdown);
+        UIkit.component('form', Form);
         UIkit.component('formCustom', FormCustom);
         UIkit.component('gif', Gif);
         UIkit.component('grid', Grid);
